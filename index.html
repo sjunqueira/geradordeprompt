@@ -111,8 +111,13 @@
 
         <h1>Gerador de Prompt</h1>
 
-        <p>Esta aplicação permite gerar um prompt com base nos depoimentos inseridos. Basta preencher o campo abaixo com
-            os depoimentos e clicar no botão "Gerar Prompt". O resultado será exibido na caixa de texto abaixo.</p>
+        <p>Esta aplicação permite gerar um prompt com base nos depoimentos de NPS inseridos. Basta preencher o campo
+            abaixo com
+            os depoimentos e clicar no botão "Gerar Prompt". O resultado será exibido na caixa de texto abaixo, e aí é
+            só clicar em "Copiar Prompt" e jogar lá no Chat GPT.
+            A ideia deste gerador é realizar análises simples de NPS. Esta aplicação não possui backend e não salva
+            nenhuma informação, porém, recomendo que remova informações confidenciais
+            dos depoimentos antes de enviar ao ChatGPT.</p>
 
         <div style="text-align: center;">
             <label for="depoimentos">Depoimentos:</label>
@@ -131,10 +136,14 @@
                 var depoimentos = document.getElementById("depoimentos").value;
 
                 var prompt =
-                    `Depoimentos:\n\n"${depoimentos}"\n\nSentimentos:\n- Negativo: Depoimentos que expressam insatisfação, críticas ou decepção em relação ao curso ou produto.\n- Neutro: Depoimentos que são neutros ou não expressam um sentimento forte.\n- Positivo: Depoimentos que expressam satisfação, elogios ou entusiasmo em relação ao curso ou produto.\n\nE aqui estão algumas categorias possíveis:\n- Categoria 1: Descrição da Categoria 1\n- Categoria 2: Descrição da Categoria 2\n- Categoria 3: Descrição da Categoria 3\n\nTabela de Sentimentos:\n| Categoria/Sentimento | Descrição                | Quantidade | Percentual |\n| -------------------- | ------------------------ | ---------- | ---------- |\n| Negativo             | Depoimentos negativos    | XX         | XX%        |\n| Neutro               | Depoimentos neutros      | XX         | XX%        |\n| Positivo             | Depoimentos positivos    | XX         | XX%        |\n\nTabela de Categorias:\n| Categoria/Sentimento | Descrição da Categoria    | Quantidade | Percentual |\n| -------------------- | ------------------------ | ---------- | ---------- |\n| Categoria 1          | Descrição da Categoria 1 | XX         | XX%        |\n| Categoria 2          | Descrição da Categoria 2 | XX         | XX%        |\n| Categoria 3          | Descrição da Categoria 3 | XX         | XX%        |`;
+                    `Abaixo estão alguns depoimentos de clientes sobre um determinado curso ou produto. Sua tarefa é analisar esses depoimentos e categorizá-los em diferentes sentimentos e categorias.\n\nDepoimentos:\n\n${depoimentos}\n\nSepare os depoimentos em categorias e sentimentos e crie duas tabelas, cada uma com os seguintes campos, Sentimento/Categoria, Descrição, Quantidade e Percentual. \n\n\nAo categorizar por sentimentos, quero que analise como Negativo: Depoimentos que expressam insatisfação, críticas ou decepção em relação ao curso, Neutro: Depoimentos que são neutros ou não expressam um sentimento forte.
+e Positivo: Depoimentos que expressam satisfação, elogios ou entusiasmo em relação ao curso ou produto.\n\nAlém disso, na tabela de categorias podemos ter Didática e Aprendizado: Depoimentos relacionados à didática do professor e ao aprendizado proporcionado pelo curso/produto., Problemas Técnicos: Depoimentos que mencionam dificuldades técnicas encontradas durante o curso, Estrutura do Curso: Depoimentos que abordam a estrutura e organização do curso, Falta de Informações: Depoimentos que mencionam a falta de informações essenciais, Atualização do Curso: Depoimentos relacionados à necessidade de atualização do conteúdo do curso e também há a liberdade para criar novas categorias, se achar relevante. \n\nPor fim, a estrutura das tabelas deve ser: \n
+\n| Sentimento/Descrição| Descrição           | Quantidade | Percentual |\n| ------------------- | ------------------- | ---------- | ---------- |\n|                     |                     |            |            |\n|                     |                     |            |            |\n|                     |                     |            |            |`;
 
                 document.getElementById("resultado").textContent = prompt;
             }
+
+
 
             function copiarPrompt() {
                 var resultado = document.getElementById("resultado");
