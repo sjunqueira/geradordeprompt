@@ -137,12 +137,31 @@
 
                 var prompt =
                     `Abaixo estão alguns depoimentos de clientes sobre um determinado curso ou produto. Sua tarefa é analisar esses depoimentos e categorizá-los em diferentes sentimentos e categorias.\n\nDepoimentos:\n\n${depoimentos}\n\nSepare os depoimentos em categorias e sentimentos e crie duas tabelas, cada uma com os seguintes campos, Sentimento/Categoria, Descrição, Quantidade e Percentual. \n\n\nAnalisando os depoimentos dos clientes sobre um determinado curso ou produto, categorize-os e agrupe-os em diferentes sentimentos (Negativo, Neutro, Positivo) e categorias (Didática e Aprendizado, Problemas Técnicos, Estrutura do Curso, Falta de Informações, Atualização do Curso, entre outras categorias relevantes).
-                    \n\nQuero que faça uma análise, do tipo "Positivo | Depoimentos relatam que o curso foi incrível, que é recomendado, que superou as expectativas e indicariam para os amigos", tanto em Positivo, Neutro e Negativo quanto nas categorias da segunda tabela. Além disso, quero que ordene, do que possui maior quantidade para o menor.
-                    \n\nPor fim, a estrutura das tabelas deve ser: \n
-\n| Sentimento/Descrição| Descrição           | Quantidade | Percentual |\n| ------------------- | ------------------- | ---------- | ---------- |\n|                     |                     |            |            |\n|                     |                     |            |            |\n|                     |                     |            |            |`;
+        \n\nÉ IMPORTANTE que faça uma análise, do tipo "Positivo | Depoimentos relatam que o curso foi incrível, que é recomendado, que superou as expectativas e indicariam para os amigos", tanto em Positivo, Neutro e Negativo quanto nas categorias da segunda tabela. Além disso, quero que ordene, do que possui maior quantidade para o menor.
+        \n\nAqui está a um exemplo da primeira tabela, categorizando os depoimentos por sentimento:
+        
+| Sentimento | Descrição | Quantidade | Percentual |
+| -------------------- | --------- | ---------- | ---------- |
+| Positivo             | Incrível, recomendo, superou as expectativas | 9  | 45% |
+| Neutro               | Razoável, satisfatório, mediano             | 7  | 35% |
+| Negativo             | Decepção, não recomendo, perda de tempo      | 4  | 20% |
+        
+Aqui está um exemplo da segunda tabela, categorizando os depoimentos por categoria:
+        
+| Categoria     | Descrição                                   | Quantidade | Percentual |
+| ------------------------ | ------------------------------------------ | ---------- | ---------- |
+| Didática e Aprendizado   | Didática clara, didática confusa, didática fraca | 12 | 60% |
+| Estrutura do Curso       | Vídeos de ótima qualidade, vídeos monótonos | 9 | 45% |
+| Exercícios Práticos      | Exercícios úteis, exercícios repetitivos | 10 | 50% |
+| Suporte Técnico          | Suporte rápido e eficiente, suporte fraco | 6 | 30% |
+| Quantidade de Material   | Material excelente, falta de informações | 6 | 30% |
+| Atualização do Curso     | Curso atualizado, curso desatualizado | 2 | 10% |
+| Problemas Técnicos       | N/A                                        | 0 | 0% |
+`;
 
                 document.getElementById("resultado").textContent = prompt;
             }
+
 
 
 
