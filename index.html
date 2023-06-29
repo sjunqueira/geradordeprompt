@@ -117,12 +117,21 @@
             só clicar em "Copiar Prompt" e jogar lá no Chat GPT.
             A ideia deste gerador é realizar análises simples de NPS. Esta aplicação não possui backend e não salva
             nenhuma informação, porém, recomendo que remova informações confidenciais
-            dos depoimentos antes de enviar ao ChatGPT.</p>
+            dos depoimentos antes de enviar ao ChatGPT. Para que o gerador quebre a linha corretamente do depoimento, é necessário que inclua "##" ao fim do comentário</p>
 
         <div style="text-align: center;">
             <label for="depoimentos">Depoimentos:</label>
         </div>
         <textarea id="depoimentos" placeholder="Insira os depoimentos aqui..." autofocus></textarea>
+        
+        <div style="text-align: center;">
+            <label for="sentimento">Qual a categoria dos depoimentos?</label>
+            <select id="sentimento">
+                <option value="Promotores">Promotores</option>
+                <option value="Neutros">Neutros</option>
+                <option value="Detratores">Detratores</option>
+            </select>
+        </div>
 
         <div class="btn-container">
             <button class="btn" onclick="gerarPrompt()">Gerar Prompt</button>
@@ -134,11 +143,30 @@
         <script>
             function gerarPrompt() {
                 var depoimentos = document.getElementById("depoimentos").value;
+                var sentimento = document.getElementById("sentimento").value;
+                var inicioDepoimentos = "<início dos depoimentos>";
+                var fimDepoimentos = "<fim dos depoimentos>";
 
+                // Dividindo os depoimentos em linhas
+                var linhasDepoimentos = depoimentos.split('##');
+
+                // Removendo espaços em branco no início e fim das linhas
+                linhasDepoimentos = linhasDepoimentos.map(linha => linha.trim());
+
+                // Enumerando e formatando os depoimentos
+                var depoimentosEnumerados = linhasDepoimentos.map((linha, indice) => {
+                    var numeroDepoimento = indice + 1;
+                    return `${numeroDepoimento}. ${linha}`;
+                });
+
+                // Construindo o prompt
                 var prompt =
-                    `Abaixo estão alguns depoimentos de clientes sobre um determinado curso ou produto. Sua tarefa é analisar esses depoimentos e categorizá-los em diferentes sentimentos e categorias.\n\nDepoimentos:\n\n${depoimentos}\n\nSepare os depoimentos em categorias e sentimentos e crie duas tabelas, cada uma com os seguintes campos, Sentimento/Categoria, Descrição, Quantidade e Percentual. \n\n\nAnalisando os depoimentos dos clientes sobre um determinado curso ou produto, categorize-os e agrupe-os em diferentes sentimentos (Negativo, Neutro, Positivo) e categorias (Didática e Aprendizado, Problemas Técnicos, Estrutura do Curso, Falta de Informações, Atualização do Curso, entre outras categorias relevantes).
-        \n\nÉ IMPORTANTE que faça uma análise, do tipo "Positivo | Depoimentos relatam que o curso foi incrível, que é recomendado, que superou as expectativas e indicariam para os amigos", tanto em Positivo, Neutro e Negativo quanto nas categorias da segunda tabela. Além disso, quero que ordene, do que possui maior quantidade para o menor.
-        \n\nAqui está a um exemplo da primeira tabela, categorizando os depoimentos por sentimento:
+                    `Abaixo estão alguns depoimentos ${sentimento.toLowerCase()} de clientes sobre um determinado curso. Sua tarefa é analisar esses depoimentos e categorizá-los em diferentes sentimentos e categorias. Você deve considerar apenas o que está entre "<início dos depoimentos>" e "<fim dos depoimentos>", todo o resto é contexto e exemplo. Depoimentos:\n\n${inicioDepoimentos}\n\n${depoimentosEnumerados.join('\n')}\n\n${fimDepoimentos}\n\n \nSepare os depoimentos em categorias e sentimentos e crie DUAS tabelas, cada uma com os seguintes campos, Sentimento para a tabela 1 e Categoria para a tabela 2, Descrição, Quantidade e Percentual. \n\n\nAnalisando os depoimentos dos clientes sobre um determinado curso ou produto, categorize-os e agrupe-os em diferentes sentimentos (Negativo, Neutro, Positivo) e categorias (Didática e Aprendizado, Problemas Técnicos, Estrutura do Curso, Falta de Informações, Atualização do Curso, entre outras categorias relevantes).
+                        \nAgrupe comentários de um mesmo sentimento em uma única descrição, a tabela 1 deve ter apenas 3 linhas(Positivo, Neutro, Negativo), a descrição pode ser mais detalhada.
+
+        \nÉ IMPORTANTE que faça uma análise, do tipo "Positivo | Depoimentos relatam que o curso foi incrível, que é recomendado, que superou as expectativas e indicariam para os amigos", tanto em Positivo, Neutro e Negativo quanto nas categorias da segunda tabela. Além disso, quero que ordene, do que possui maior quantidade para o menor.
+        \nVale lembrar também, que é esperado depoimentos mais positivos caso sejam promotores, mais neutros e sem sentimento caso sejam Neutros e mais negativos caso sejam detratores.
+        \nAqui está a um exemplo da primeira tabela, categorizando os depoimentos por sentimento:
         
 | Sentimento | Descrição | Quantidade | Percentual |
 | -------------------- | --------- | ---------- | ---------- |
@@ -158,9 +186,10 @@ Aqui está um exemplo da segunda tabela, categorizando os depoimentos por catego
 | Atualização do Curso     | Curso atualizado, curso desatualizado | 2 | 10% |
 | Problemas Técnicos       | N/A                                        | 0 | 0% |
 `;
-
                 document.getElementById("resultado").textContent = prompt;
             }
+
+
 
 
 
