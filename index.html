@@ -4,103 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Gerador de Prompt</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Material+Icons+Outlined');
-        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background-color: #222;
-            color: #fff;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1080px;
-            margin: 0 auto;
-            background-color: #333;
-            border-radius: 10px;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        p {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-align: center;
-            padding-bottom: 10px;
-        }
-
-        textarea {
-            width: 100%;
-            height: 100px;
-            resize: vertical;
-            border-radius: 5px;
-            background-color: #444;
-            color: #fff;
-        }
-
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .btn {
-            display: block;
-            margin: 0 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            white-space: nowrap;
-            cursor: pointer;
-            border-radius: 5px;
-            border: none;
-            color: #fff;
-            background-color: #007bff;
-        }
-
-        .btn:hover {
-            background-color: #0069d9;
-        }
-
-        pre {
-            background-color: #444;
-            padding: 10px;
-            border-radius: 5px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            color: #fff;
-        }
-
-        .code-icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 120px;
-            height: 120px;
-            background-color: #444;
-            border-radius: 50%;
-            margin: 0 auto;
-        }
-
-        .code-icon span {
-            font-size: 50px;
-            font-family: "Material Icons Outlined";
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
 </head>
 
 <body>
@@ -137,76 +43,13 @@
             <button class="btn" onclick="gerarPrompt()">Gerar Prompt</button>
             <button class="btn" onclick="copiarPrompt()">Copiar Prompt</button>
         </div>
+        
+        <div id="aviso" class="aviso"></div> <!-- Novo elemento para exibir o aviso -->
+        <pre id="resultado"></pre>
 
         <pre id="resultado"></pre>
 
-        <script>
-            function gerarPrompt() {
-                var depoimentos = document.getElementById("depoimentos").value;
-                var sentimento = document.getElementById("sentimento").value;
-                var inicioDepoimentos = "<início dos depoimentos>";
-                var fimDepoimentos = "<fim dos depoimentos>";
-
-                // Dividindo os depoimentos em linhas
-                var linhasDepoimentos = depoimentos.split('##');
-
-                // Removendo espaços em branco no início e fim das linhas
-                linhasDepoimentos = linhasDepoimentos.map(linha => linha.trim());
-
-                // Enumerando e formatando os depoimentos
-                var depoimentosEnumerados = linhasDepoimentos.map((linha, indice) => {
-                    var numeroDepoimento = indice + 1;
-                    return `${numeroDepoimento}. ${linha}`;
-                });
-
-                // Construindo o prompt
-                var prompt =
-                    `Abaixo estão alguns depoimentos ${sentimento.toLowerCase()} de clientes sobre um determinado curso. Sua tarefa é analisar esses depoimentos e categorizá-los em diferentes sentimentos e categorias. Você deve considerar apenas o que está entre "<início dos depoimentos>" e "<fim dos depoimentos>", todo o resto é contexto e exemplo. Depoimentos:\n\n${inicioDepoimentos}\n\n${depoimentosEnumerados.join('\n')}\n\n${fimDepoimentos}\n\n \nSepare os depoimentos em categorias e sentimentos e crie DUAS tabelas, cada uma com os seguintes campos, Sentimento para a tabela 1 e Categoria para a tabela 2, Descrição, Quantidade e Percentual. \n\n\nAnalisando os depoimentos dos clientes sobre um determinado curso ou produto, categorize-os e agrupe-os em diferentes sentimentos (Negativo, Neutro, Positivo) e categorias (Didática e Aprendizado, Problemas Técnicos, Estrutura do Curso, Falta de Informações, Atualização do Curso, entre outras categorias relevantes).
-                        \nAgrupe comentários de um mesmo sentimento em uma única descrição, a tabela 1 deve ter apenas 3 linhas(Positivo, Neutro, Negativo), a descrição pode ser mais detalhada.
-
-        \nÉ IMPORTANTE que faça uma análise, do tipo "Positivo | Depoimentos relatam que o curso foi incrível, que é recomendado, que superou as expectativas e indicariam para os amigos", tanto em Positivo, Neutro e Negativo quanto nas categorias da segunda tabela. Além disso, quero que ordene, do que possui maior quantidade para o menor.
-        \nVale lembrar também, que é esperado depoimentos mais positivos caso sejam promotores, mais neutros e sem sentimento caso sejam Neutros e mais negativos caso sejam detratores.
-        \nAqui está a um exemplo da primeira tabela, categorizando os depoimentos por sentimento:
-        
-| Sentimento | Descrição | Quantidade | Percentual |
-| -------------------- | --------- | ---------- | ---------- |
-| Positivo             | Incrível, recomendo, superou as expectativas | 9  | 45% |
-| Neutro               | Razoável, satisfatório, mediano             | 7  | 35% |
-| Negativo             | Decepção, não recomendo, perda de tempo      | 4  | 20% |
-        
-Aqui está um exemplo da segunda tabela, categorizando os depoimentos por categoria:
-        
-| Categoria     | Descrição                                   | Quantidade | Percentual |
-| ------------------------ | ------------------------------------------ | ---------- | ---------- |
-| Didática e Aprendizado   | Didática clara, didática confusa, didática fraca | 12 | 60% |
-| Estrutura do Curso       | Vídeos de ótima qualidade, vídeos monótonos | 9 | 45% |
-| Exercícios Práticos      | Exercícios úteis, exercícios repetitivos | 10 | 50% |
-| Suporte Técnico          | Suporte rápido e eficiente, suporte fraco | 6 | 30% |
-| Quantidade de Material   | Material excelente, falta de informações | 6 | 30% |
-| Atualização do Curso     | Curso atualizado, curso desatualizado | 2 | 10% |
-| Problemas Técnicos       | N/A                                        | 0 | 0% |
-
-Se houver comentários o suficiente relacionados a aplicação do conhecimento, gostaria que me trouxesse um resumo também e quantidades.
-`;
-                document.getElementById("resultado").textContent = prompt;
-            }
-
-
-
-
-
-
-            function copiarPrompt() {
-                var resultado = document.getElementById("resultado");
-                var range = document.createRange();
-                range.selectNode(resultado);
-                window.getSelection().removeAllRanges();
-                window.getSelection().addRange(range);
-                document.execCommand("copy");
-                window.getSelection().removeAllRanges();
-                alert("O prompt foi copiado para a área de transferência!");
-            }
-        </script>
+        <script src="script.js"></script>
     </div>
 </body>
 
